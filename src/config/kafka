@@ -1,10 +1,10 @@
 const { Kafka } = require("kafkajs");
 
 const kafka = new Kafka({
-  clientId: "inbound-service",
-  // Kafka 브로커 주소 확인
-  brokers: ["my-cluster-kafka-0.kafka:9092", "my-cluster-kafka-1.kafka:9092"],
-});
+    clientId: "inbound-service",
+    // 카프카 브로커 정보 넣어줬음
+    brokers: ["my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"], 
+  });
 
 const producer = kafka.producer();
 
