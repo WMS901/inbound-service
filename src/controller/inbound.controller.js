@@ -39,6 +39,20 @@ class InboundController {
     }
   }
 
+  // ✅ 입고 확정 (confirmInbound) 기능 추가
+  async confirmInbound(req, res) {
+    try {
+      const { sku } = req.params;
+      const confirmedItem = await InboundService.updateInboundItem(sku, { confirmed: true });
+
+      if (!confirmedItem) return res.status(404).json({ message: "Item not found" });
+      
+      res.status(200).json({ message: "입고 확정 완료", item: confirmedItem });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async deleteInboundItem(req, res) {
     try {
       const deletedItem = await InboundService.deleteInboundItem(req.params.sku);
