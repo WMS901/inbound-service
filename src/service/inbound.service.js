@@ -21,15 +21,23 @@ async function updateInboundItem(sku, updateData) {
 
   if (!updatedItem) return null;
 
-  // ✅ Kafka 메시지 발행 (입고 확정 시)
-  try {
-    await producer.send({
-      topic: "inbound-confirmed", // ✅ Kafka 토픽 이름
-      messages: [{ key: sku, value: JSON.stringify(updatedItem) }],
-    });
-    console.log(`📩 Kafka 메시지 전송 완료: SKU ${sku}`);
-  } catch (error) {
-    console.error("🚨 Kafka 메시지 전송 실패:", error);
+  // "입고 확정"이 된 경우에만 Kafka 메시지를 전송
+  if (updateData.confirmed === true) {
+    try {
+      await producer.send({
+        topic: "inbound-confirmed",
+        messages: [
+          {
+            key: sku,
+            value: JSON.stringify(updatedItem),
+            headers: { "content-type": "application/json" },
+          },
+        ],
+      });
+      console.log(`📩 Kafka 메시지 전송 완료: SKU ${sku}`);
+    } catch (error) {
+      console.error("🚨 Kafka 메시지 전송 실패:", error);
+    }
   }
 
   return updatedItem;
