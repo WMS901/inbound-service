@@ -26,12 +26,12 @@ async function updateInboundItem(sku, updateData) {
     await producer.send({
       topic: "inbound-confirmed",
       messages: [
-        {
-          key: sku,
-          value: JSON.stringify(updatedItem),
+        { // Buffer 형태로 변환 sping에서 인식하게
+          key: sku, 
+          value: Buffer.from(JSON.stringify(updatedItem)),
           headers: {
             "content-type": "application/json",
-            "typeId": "com.example.inventory.dto.InventoryItemRequestDto", //타입 명시 추가
+            "typeId": "com.example.inventory.dto.InventoryItemRequestDto", // ✅ 타입 정보 유지
           },
         },
       ],
