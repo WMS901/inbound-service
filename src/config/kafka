@@ -1,0 +1,19 @@
+const { Kafka } = require("kafkajs");
+
+const kafka = new Kafka({
+    clientId: "inbound-service",
+    // 카프카 브로커 정보확인후 넣어줬음
+    brokers: ["my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"], 
+  });
+
+const producer = kafka.producer();
+
+//커넥 확인.
+const connectProducer = async () => {
+  await producer.connect();
+  console.log("Kafka Producer 연결 완료");
+};
+
+connectProducer();
+
+module.exports = producer;

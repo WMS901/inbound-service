@@ -4,7 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const inboundRoutes = require('./src/routes/inbound.routes');
 const app = express();
-const PORT = 3000;
+const PORT = 1050;
 const mongoURI = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_DB}`;
 
 app.use(cors());
