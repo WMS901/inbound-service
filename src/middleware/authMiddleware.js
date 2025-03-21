@@ -9,3 +9,5 @@ const authenticateJWT = (req, res, next) => {
     req.user = { username: kongConsumer }; // 요청 객체에 사용자 정보 저장
     next();
 };
+
+module.exports = authenticateJWT;
