@@ -1,30 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const InboundController = require('../controller/inbound.controller');
-const authenticateJWT = require("../middleware/authMiddleware"); // JWT 인증 미들웨어 추가
+const authenticateJWT = require("../middleware/authMiddleware"); // ✅ JWT 인증 미들웨어
 
 const inboundController = new InboundController();
 
 // ✅ JWT 인증이 필요한 API
-router.post('/', authenticateJWT, (req, res) =>
-  inboundController.createInboundItem(req, res)
-);
-router.put('/:sku', authenticateJWT, (req, res) =>
-  inboundController.updateInboundItem(req, res)
-);
-router.delete('/:sku', authenticateJWT, (req, res) =>
-  inboundController.deleteInboundItem(req, res)
-);
+router.post('/', authenticateJWT, inboundController.createInboundItem);
+router.put('/:sku', authenticateJWT, inboundController.updateInboundItem);
+router.delete('/:sku', authenticateJWT, inboundController.deleteInboundItem);
 
 // ✅ 인증 없이 접근 가능한 API
-router.get('/', (req, res) =>
-  inboundController.getAllInboundItems(req, res)
-);
-router.get('/:sku', (req, res) =>
-  inboundController.getInboundItemBySku(req, res)
-);
-router.put('/:sku/confirm', (req, res) =>
-  inboundController.confirmInbound(req, res)
-);
+router.get('/', inboundController.getAllInboundItems);
+router.get('/:sku', inboundController.getInboundItemBySku);
+router.put('/:sku/confirm', inboundController.confirmInbound); // Kafka 연동 → 인증 제거 유지
 
 module.exports = router;
