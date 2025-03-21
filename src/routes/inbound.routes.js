@@ -5,26 +5,13 @@ const authenticateJWT = require("../middleware/authMiddleware"); // JWT 인증 �
 
 const inboundController = new InboundController();
 
-// ✅ JWT 인증이 필요한 API
-router.post('/', authenticateJWT, (req, res) =>
-  inboundController.createInboundItem(req, res)
-);
-router.put('/:sku', authenticateJWT, (req, res) =>
-  inboundController.updateInboundItem(req, res)
-);
-router.delete('/:sku', authenticateJWT, (req, res) =>
-  inboundController.deleteInboundItem(req, res)
-);
+// ✅ this 컨텍스트 고정 (bind 사용)
+router.post('/', authenticateJWT, inboundController.createInboundItem.bind(inboundController));
+router.put('/:sku', authenticateJWT, inboundController.updateInboundItem.bind(inboundController));
+router.delete('/:sku', authenticateJWT, inboundController.deleteInboundItem.bind(inboundController));
 
-// ✅ 인증 없이 접근 가능한 API
-router.get('/', (req, res) =>
-  inboundController.getAllInboundItems(req, res)
-);
-router.get('/:sku', (req, res) =>
-  inboundController.getInboundItemBySku(req, res)
-);
-router.put('/:sku/confirm', (req, res) =>
-  inboundController.confirmInbound(req, res)
-);
+router.get('/', inboundController.getAllInboundItems.bind(inboundController));
+router.get('/:sku', inboundController.getInboundItemBySku.bind(inboundController));
+router.put('/:sku/confirm', inboundController.confirmInbound.bind(inboundController));
 
 module.exports = router;
