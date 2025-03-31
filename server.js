@@ -11,12 +11,10 @@ const mongoURI = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@
 app.use(cors());
 app.use(express.json());
 
-// ALB Health Check 엔드포인트 추가
-app.use('/api/inbound', (req, res, next) => {
-  if (req.path === '/actuator/health') {
-    return res.status(200).send('OK');
-  }
-  next();
+
+// ALB 헬스체크 경로는 정확히 매핑되게 분리
+app.get('/api/inbound/actuator/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
 app.use('/api/inbound', inboundRoutes);
