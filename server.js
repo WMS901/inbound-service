@@ -12,10 +12,12 @@ app.use(cors());
 app.use(express.json());
 
 
-// ALB 헬스체크 경로는 정확히 매핑되게 분리
-app.get('/api/inbound/actuator/health', (req, res) => {
-  res.status(200).send('OK');
+// Preflight 요청 직접 처리
+// app.options('*', cors(corsOptions));
+app.get('/actuator/health', (req, res) => {
+  res.status(200).json({ status: 'UP' });
 });
+
 
 app.use('/api/inbound', inboundRoutes);
 
