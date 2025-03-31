@@ -11,9 +11,10 @@ const mongoURI = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@
 app.use(cors());
 app.use(express.json());
 
-// ALB Health Check 엔드포인트 추가
+// Preflight 요청 직접 처리
+// app.options('*', cors(corsOptions));
 app.get('/actuator/health', (req, res) => {
-  res.status(200).send('OK');
+  res.status(200).json({ status: 'UP' });
 });
 
 app.use('/api/inbound', inboundRoutes);
