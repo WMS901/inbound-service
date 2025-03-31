@@ -11,18 +11,13 @@ const mongoURI = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@
 app.use(cors());
 app.use(express.json());
 
-// ALB Health Check - 반드시 /api/inbound/actuator/health 경로로 설정
-app.use('/api/inbound', (req, res, next) => {
-  if (req.path === '/actuator/health') {
-    return res.status(200).send('OK');
-  }
-  next();
+// ALB Health Check 엔드포인트 추가
+app.get('/actuator/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
-// 실제 라우터
 app.use('/api/inbound', inboundRoutes);
 
-// MongoDB 연결 및 서버 실행
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('✅ MongoDB Connected Successfully');
