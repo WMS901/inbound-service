@@ -5,10 +5,16 @@ const mongoose = require('mongoose');
 const inboundRoutes = require('./src/routes/inbound.routes');
 const app = express();
 const PORT = 1050;
+
 const mongoURI = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_DB}`;
 
 app.use(cors());
 app.use(express.json());
+
+// ALB Health Check 엔드포인트 추가
+app.get('/actuator/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 app.use('/api/inbound', inboundRoutes);
 
