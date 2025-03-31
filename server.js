@@ -12,8 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 // ALB Health Check 엔드포인트 추가
-app.get('/actuator/health', (req, res) => {
-  res.status(200).send('OK');
+app.use('/api/inbound', (req, res, next) => {
+  if (req.path === '/actuator/health') {
+    return res.status(200).send('OK');
+  }
+  next();
 });
 
 app.use('/api/inbound', inboundRoutes);
