@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const InboundController = require('../controller/inbound.controller');
-const authenticateJWT = require("../middleware/authMiddleware"); // 인증 미들웨어 추가
+//const authenticateJWT = require("../middleware/authMiddleware"); // 인증 미들웨어 추가
 
 const inboundController = new InboundController();
 
